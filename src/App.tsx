@@ -10,6 +10,7 @@ import EditModal from './components/EditModal';
 import AboutModal from './components/AboutModal';
 import EmptyState from './components/EmptyState';
 import Footer from './components/Footer';
+import FocusMode from './components/FocusMode';
 
 const STORAGE_KEY = 'focuslist_tasks_v2';
 
@@ -78,6 +79,7 @@ export default function App() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [focusTask, setFocusTask] = useState<Task | null>(null);
 
   // Input ref to focus on demand
   const creationInputRef = useRef<HTMLInputElement | null>(null);
@@ -137,9 +139,15 @@ export default function App() {
     );
   };
 
+
   const handleDelete = (id: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
+  const handleStartFocus = (task: Task) => {
+  if (!task.completed) {
+    setFocusTask(task);
+  }
+};
 
   const handleClearCompleted = () => {
     setTasks((prev) => prev.filter((t) => !t.completed));
@@ -309,6 +317,14 @@ export default function App() {
         isOpen={isAboutModalOpen}
         onClose={() => setIsAboutModalOpen(false)}
       />
+      <FocusMode
+        task={focusTask}
+        onComplete={(id) => {
+          handleToggleComplete(id);
+          setFocusTask(null);
+        }}
+        onClose={() => setFocusTask(null)}
+/>
     </div>
   );
 }
