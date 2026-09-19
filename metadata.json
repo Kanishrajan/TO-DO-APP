@@ -1,0 +1,6 @@
+{
+  "name": "FocusList",
+  "description": "A brutalist task manager combining neo-brutalism, Bauhaus geometry, Y2K futurism, and subtle psychedelic accents.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
