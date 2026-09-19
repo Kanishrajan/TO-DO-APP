@@ -1,5 +1,13 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { Task, Priority, FilterStatus, PriorityFilter, TaskStats } from './types';
+import {
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  Task,
+} from './types';
+
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import StatsBar from './components/StatsBar';
@@ -11,6 +19,12 @@ import AboutModal from './components/AboutModal';
 import EmptyState from './components/EmptyState';
 import Footer from './components/Footer';
 import FocusMode from './components/FocusMode';
+import FocusComplete from './components/FocusComplete';
+
+import { useTasks } from './hooks/useTasks';
+import { useTaskFilters } from './hooks/useTaskFilters';
+
+import { calculateTaskStats } from './utils/taskStats';
 
 const STORAGE_KEY = 'focuslist_tasks_v2';
 
@@ -103,6 +117,7 @@ export default function App() {
   }, [tasks]);
 
   // Actions
+  
   const handleAddTask = (title: string, priority: Priority) => {
     const newTask: Task = {
       id: `tsk-${Date.now().toString(36)}`,
@@ -139,15 +154,9 @@ export default function App() {
     );
   };
 
-
   const handleDelete = (id: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
-  const handleStartFocus = (task: Task) => {
-  if (!task.completed) {
-    setFocusTask(task);
-  }
-};
 
   const handleClearCompleted = () => {
     setTasks((prev) => prev.filter((t) => !t.completed));
@@ -174,6 +183,7 @@ export default function App() {
     }
   };
 
+  // Filter and sort tasks
   // Filter and sort tasks
   const filteredTasks = useMemo(() => {
     return tasks
